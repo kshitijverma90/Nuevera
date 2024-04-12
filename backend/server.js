@@ -47,7 +47,7 @@ app.get('/endpoint',async (req, res) => {
   // Your logic to handle the value
   // res.send('Received value: ' + valueReceived);
   try {
-    const matchedProducts = await Product.find({ price: 99.99 });
+    const matchedProducts = await Product.find({ cat_id: valueReceived });
 
     if (matchedProducts.length === 0) {
       return res.status(404).send({ message: 'No products found for the given price' });
