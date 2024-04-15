@@ -24,9 +24,7 @@ app.use(cors())
 app.get('/insert', async (req, res) => {
   try {
     const productData = {
-      name: 'Product 1',
-      price: 99.99,
-      description: 'This is a test product'
+      id:"34834843",cat_id:"2", title:"Redmi smart phone",discription:"Redmi 13C (Starfrost White, 4GB RAM, 128GB Storage) | Powered by 4G MediaTek Helio G85 | 90Hz Display | 50MP AI Triple Camera", price:239.1 , image:"https://m.media-amazon.com/images/I/71scmEdSC2L._SX569_.jpg", rating:4,stocks:2
     };
 
     const newProduct = await Product.create(productData);
@@ -41,23 +39,32 @@ app.get('/insert', async (req, res) => {
 app.get('/',(req,res)=>res.status(200).send('hello world'))
 
 
-app.get('/endpoint',async (req, res) => {
+app.get('/endpoint', async (req, res) => {
   const valueReceived = req.query.value;
   console.log('Received value:', valueReceived);
-  // Your logic to handle the value
-  // res.send('Received value: ' + valueReceived);
-  try {
-    const matchedProducts = await Product.find({ cat_id: valueReceived });
 
-    if (matchedProducts.length === 0) {
-      return res.status(404).send({ message: 'No products found for the given price' });
+  if (valueReceived === '1') {
+    try {
+      const allProducts = await Product.find({});
+      console.log(allProducts);
+      res.status(200).json(allProducts);
+    } catch (error) {
+      res.status(500).send({ message: 'An error occurred', error: error.message });
     }
-
-    res.status(200).json(matchedProducts);
-  } catch (error) {
-    res.status(500).send({ message: 'An error occurred', error: error.message });
+  } else {
+    try {
+      const matchedProducts = await Product.find({ cat_id: valueReceived });
+      console.log(matchedProducts);
+      if (matchedProducts.length === 0) {
+        return res.status(404).send({ message: 'No products found for the given price' });
+      }
+      res.status(200).json(matchedProducts);
+    } catch (error) {
+      res.status(500).send({ message: 'An error occurred', error: error.message });
+    }
   }
 });
+
 
 // app.get('/categories', async (req, res) => {
 //   return res.status(404).send({ message: 'No products found for the given category' })
